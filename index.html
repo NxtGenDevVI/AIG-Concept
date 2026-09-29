@@ -196,18 +196,14 @@ h1,h2,h3{
   transition:background-color .7s ease;
 }
 .site-head__in{
-  display:grid; grid-template-columns:1fr auto 1fr;
-  align-items:center; gap:20px;
+  position:relative;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:20px;
   min-height:clamp(72px,7.5vw,96px); padding-inline:var(--gut);
 }
-/* Reversed to white. The full-colour lockup is unreadable on a dark bar
-   (1.05:1); a mono-white knockout reads at 17:1. See the note in the README
-   — a properly supplied reversed asset would be better than a filter. */
-.site-head__in img{
-  height:clamp(30px,4vw,52px); width:auto; justify-self:center;
-  filter:brightness(0) invert(1);
-}
-.site-head__side{ margin:0; justify-self:start; color:rgba(255,255,255,.68); }
+/* Uses the supplied negative lockup, so the wordmark is genuinely white
+   artwork with its yellow rules intact — no filter, nothing recoloured. */
+.site-head__in img{ height:clamp(30px,4vw,52px); width:auto; }
 
 /* Four segments, one per stop, lit in the live accent. Driven entirely by
    body[data-stop] — no extra JS, and it cross-fades with everything else. */
@@ -224,8 +220,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
 
 /* Too tight for the flanks — fall back to the mark alone */
 @media (max-width:760px){
-  .site-head__in{ grid-template-columns:1fr; }
-  .site-head__side,.seg{ display:none; }   /* the button stays */
+  .seg{ display:none; }   /* the mark and the button stay */
 }
 .accent{
   height:6px;
@@ -489,6 +484,37 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
 /* ===========================================================================
    4b. CONTACT — button in the header, full-height sheet that drops over
    =========================================================================== */
+/* Live title for the stop you are on. Absolutely centred rather than a
+   flex child, so it stays dead centre whatever the logo and button widths
+   do. aria-hidden: the wheel tabs already announce the selection, and a
+   second live region would just double up for screen readers. */
+.title{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  overflow:hidden; padding:7px 0;
+  font-family:var(--display); font-weight:600;
+  font-size:clamp(.95rem,1.5vw,1.35rem);
+  letter-spacing:.05em; text-transform:uppercase; white-space:nowrap;
+  color:var(--active-lit);
+  text-shadow:0 0 24px color-mix(in srgb, var(--active-lit) 55%, transparent);
+  transition:color .55s ease, text-shadow .55s ease;
+  pointer-events:none;
+}
+.title__c{
+  display:inline-block;
+  transform:translateY(110%); opacity:0;
+  transition:transform .5s cubic-bezier(.22,.9,.3,1), opacity .38s ease;
+  transition-delay:calc(var(--i,0) * 22ms);
+}
+.title.is-in  .title__c{ transform:none; opacity:1; }
+/* Outgoing letters leave upward, faster and tighter than they arrived */
+.title.is-out .title__c{
+  transform:translateY(-110%); opacity:0;
+  transition-duration:.18s; transition-delay:calc(var(--i,0) * 8ms);
+}
+/* Not enough clear space between the mark and the button below this */
+@media (max-width:700px){ .title{ display:none; } }
+
 .site-head__end{
   justify-self:end; display:flex; align-items:center;
   gap:clamp(10px,1.6vw,20px);
@@ -600,9 +626,11 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
   transition:background-color .7s ease;
 }
 .site-foot__in{ padding:clamp(32px,4.4vw,52px) var(--gut); text-align:center; }
-.site-foot__in img{ height:34px; width:auto; margin:0 auto clamp(16px,2.2vw,22px); filter:brightness(0) invert(1); }
+.site-foot__in img{ height:34px; width:auto; margin:0 auto clamp(16px,2.2vw,22px); }
 .site-foot p{ margin:0; font-size:13px; color:rgba(255,255,255,.60); }
 .site-foot p + p{ margin-top:6px; }
+.site-foot__name{ color:rgba(255,255,255,.9) !important; margin-bottom:10px !important; }
+.site-foot__legal{ margin-top:14px !important; color:rgba(255,255,255,.42) !important; }
 
 /* ===========================================================================
    6. FALLBACK — no pinning below 900px or under reduced motion.
@@ -655,6 +683,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
 
 @media (prefers-reduced-motion: reduce){
   .hint i{ animation:none; transform:scaleX(1); }
+  .title__c{ transform:none !important; opacity:1 !important; transition:none !important; }
   .wheel__disc{ transition:none; }
   .backdrop__layer{ transform:none; transition:opacity .2s linear; }
   .bloom{ animation:none; }
@@ -668,8 +697,8 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
 
 <header class="site-head">
   <div class="site-head__in">
-    <p class="site-head__side anno">United Kingdom &middot; Infrastructure Holdings</p>
-    <img src="assets/logos/Full-AIG-Logo.svg" alt="Alliance Infrastructure Group">
+    <img src="assets/logos/AIG-Logo-Full-Negative.svg" alt="Alliance Infrastructure Group">
+    <div class="title" aria-hidden="true"></div>
     <div class="site-head__end">
       <div class="seg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <button class="contact-btn" type="button" id="contact-open"
@@ -724,7 +753,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         <section class="panel is-active" id="panel-0" data-co="aig" aria-labelledby="tab-0">
         <article class="box box--lead" style="--x:27%;--y:50%;--w:34%;--d:.05s">
           <div class="box__in">
-            <img class="box__logo box__logo--mark" src="assets/logos/Icon-Only-AIG-Logo.svg" alt="" aria-hidden="true">
+            <img class="box__logo box__logo--mark" src="assets/logos/AIG-Logo-Emblem-Negative.svg" alt="" aria-hidden="true">
             <p class="anno">The Group &middot; United Kingdom</p>
             <h2 id="h-aig">Alliance Infrastructure Group is a UK infrastructure and construction group.</h2>
             <p>Alliance Infrastructure Group is building a leading UK infrastructure platform, bringing together high-quality businesses and specialist capabilities to deliver the infrastructure of tomorrow. We combine entrepreneurial businesses, technical expertise and disciplined investment to create a diversified group capable of delivering complex infrastructure projects at scale.</p>
@@ -756,7 +785,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         <section class="panel" id="panel-1" data-co="lynx" aria-labelledby="tab-1">
         <article class="box box--lead" style="--x:27%;--y:50%;--w:34%;--d:.05s">
           <div class="box__in">
-            <img class="box__logo" src="assets/logos/Lynx-Logo-Full.svg" alt="Lynx">
+            <img class="box__logo" src="assets/logos/Lynx-Logo-Full-Negative.svg" alt="Lynx">
             <h2>Lynx Construction Group is a UK construction and infrastructure principal contractor.</h2>
             <p>Lynx is essentially a specialist nationwide construction principal contractor that builds and refurbishes retail, commercial and residential sites, with a growing emphasis on large-scale power and fuel infrastructure.</p>
             <a class="box__link" href="https://lynxconstruction.co.uk/" target="_blank" rel="noopener noreferrer">
@@ -791,7 +820,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         <section class="panel" id="panel-2" data-co="sfi" aria-labelledby="tab-2">
         <article class="box box--lead" style="--x:27%;--y:50%;--w:34%;--d:.05s">
           <div class="box__in">
-            <img class="box__logo" src="assets/logos/SFI-Logo-Full.svg" alt="SFI">
+            <img class="box__logo" src="assets/logos/SFI-Logo-Full-Negative.svg" alt="SFI">
             <h2>Delivering Mechanical and Electrical engineering solutions nationwide.</h2>
             <p>SFI Electrical delivers mechanical and electrical engineering services for clients across a broad range of sectors throughout the UK. From design and planning through to installation, commissioning and maintenance, the business provides a single-source solution for both standalone and multidisciplinary projects.</p>
             <a class="box__link" href="https://www.sfielectrical.co.uk/" target="_blank" rel="noopener noreferrer">
@@ -826,7 +855,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         <section class="panel" id="panel-3" data-co="gridcore" aria-labelledby="tab-3">
         <article class="box box--lead" style="--x:27%;--y:50%;--w:34%;--d:.05s">
           <div class="box__in">
-            <img class="box__logo" src="assets/logos/Gridcore-Logo-Full.svg" alt="Gridcore">
+            <img class="box__logo" src="assets/logos/GCP-Logo-Full-Negative.svg" alt="Gridcore">
             <!-- [PLACEHOLDER: gridcore-heading] -->
             <h2 data-ph="gridcore-heading">One line on what Gridcore does.</h2>
             <!-- [PLACEHOLDER: gridcore-lead] -->
@@ -870,10 +899,11 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
 
 <footer class="site-foot">
   <div class="site-foot__in">
-    <img src="assets/logos/Full-AIG-Logo.svg" alt="Alliance Infrastructure Group">
-    <!-- [PLACEHOLDER: footer-registration] -->
-    <p data-ph="footer-registration">[PLACEHOLDER: registered office address &middot; company number]</p>
-    <p>&copy; <span id="yr">2026</span> Alliance Infrastructure Group. All rights reserved.</p>
+    <img src="assets/logos/AIG-Logo-Full-Negative.svg" alt="Alliance Infrastructure Group">
+    <p class="site-foot__name anno">Alliance Infrastructure Group Limited</p>
+    <p>Unit 4, Blue Prior Business Park, Redfields Lane, Fleet, Hampshire, England, GU52 0RJ</p>
+    <p>Company number 17127531</p>
+    <p class="site-foot__legal">&copy; <span id="yr">2026</span> Alliance Infrastructure Group Limited. All rights reserved.</p>
   </div>
 </footer>
 
@@ -967,6 +997,49 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
   // Must match the CSS fallback query exactly — keep the two in step.
   var staticMode = window.matchMedia('(max-width:900px), (prefers-reduced-motion: reduce)');
 
+  /* ---- animated stop title -------------------------------------------
+     Letters are rebuilt per change and staggered in. A sequence token
+     guards against fast scrolling: if another change lands mid-swap the
+     stale timer bails out instead of writing the wrong name. */
+  var titleEl = document.querySelector('.title');
+  var TITLES = ['Alliance Infrastructure Group', 'Lynx Construction Group',
+                'SFI Electrical', 'Gridcore'];
+  var titleSeq = 0;
+
+  function buildTitle(i) {
+    titleEl.textContent = '';
+    var txt = TITLES[i] || '';
+    for (var n = 0; n < txt.length; n++) {
+      var sp = document.createElement('span');
+      sp.className = 'title__c';
+      sp.style.setProperty('--i', n);
+      sp.textContent = txt.charAt(n) === ' ' ? ' ' : txt.charAt(n);
+      titleEl.appendChild(sp);
+    }
+  }
+
+  function setTitle(i, animate) {
+    if (!titleEl) return;
+    var seq = ++titleSeq;
+    if (!animate) {
+      titleEl.classList.remove('is-out');
+      buildTitle(i);
+      titleEl.classList.add('is-in');
+      return;
+    }
+    titleEl.classList.remove('is-in');
+    titleEl.classList.add('is-out');
+    setTimeout(function () {
+      if (seq !== titleSeq) return;          // superseded by a newer change
+      titleEl.classList.remove('is-out');
+      buildTitle(i);
+      requestAnimationFrame(function () {
+        if (seq !== titleSeq) return;
+        titleEl.classList.add('is-in');
+      });
+    }, 190);
+  }
+
   function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
   function rad(d) { return d * Math.PI / 180; }
 
@@ -1038,6 +1111,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
     active = i;
     // Drives --active-house: header bar, detent and backdrop tint cross-fade.
     document.body.setAttribute('data-stop', String(active));
+    setTitle(active, true);
     loadStop(active);
     items.forEach(function (el, n) { el.classList.toggle('is-active', n === active); });
     layers.forEach(function (el, n) { el.classList.toggle('is-active', n === active); });
@@ -1059,6 +1133,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
   function goStatic() {
     // Segments read from data-stop, so it must be set here too.
     document.body.setAttribute('data-stop', '0');
+    setTitle(0, false);
     // Strip tab semantics so this degrades to plain buttons + sections.
     if (list) list.removeAttribute('role');
     btns.forEach(function (b) {
@@ -1103,6 +1178,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
     });
 
     document.body.setAttribute('data-stop', '0');
+    setTitle(0, false);
     loadStop(0);
     measure();
     place();
