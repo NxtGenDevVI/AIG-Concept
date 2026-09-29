@@ -401,8 +401,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
    --cx stays 0; both still fold into the pop animation's transform. */
 .box--lead{ --cx:0; --cy:-50%; max-width:620px; }
 .box--lead .box__in{ padding:clamp(22px,2.3vw,34px); padding-top:calc(clamp(22px,2.3vw,34px) + 6px); }
-.box--lead .box__logo{ height:clamp(32px,3.4vw,50px); margin-bottom:16px; }
-.box__logo--mark{ height:clamp(50px,5.2vw,78px) !important; margin-bottom:18px; }
+.box--lead .box__logo{ height:clamp(34px,3.6vw,72px); margin-bottom:18px; }
 .box--lead h2{ font-size:clamp(1.5rem,2.9vw,2.6rem); margin-bottom:14px; color:var(--on-dark); }
 .box--lead .anno{ color:var(--lit,var(--signal)); }
 /* Link out to each business's own site. Filled rather than outlined: a
@@ -626,7 +625,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
   transition:background-color .7s ease;
 }
 .site-foot__in{ padding:clamp(32px,4.4vw,52px) var(--gut); text-align:center; }
-.site-foot__in img{ height:34px; width:auto; margin:0 auto clamp(16px,2.2vw,22px); }
+.site-foot__in img{ height:clamp(38px,5vw,76px); width:auto; max-width:100%; object-fit:contain; margin:0 auto clamp(18px,2.4vw,26px); }
 .site-foot p{ margin:0; font-size:13px; color:rgba(255,255,255,.60); }
 .site-foot p + p{ margin-top:6px; }
 .site-foot__name{ color:rgba(255,255,255,.9) !important; margin-bottom:10px !important; }
@@ -647,6 +646,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
   .panel{
     position:relative; pointer-events:auto;
     background-color:var(--night);
+    border-radius:0;
     /* background-image assigned by JS as each panel nears the viewport */
     background-size:cover; background-position:center;
     padding:clamp(12px,2.6vw,20px);
@@ -668,6 +668,24 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
     margin-bottom:clamp(10px,2vw,16px);
   }
   .box:last-child{ margin-bottom:0; }
+
+  /* Phone sizing: vw-based type bottoms out too small on a narrow screen,
+     and the lead card needs room for the enlarged lockup. */
+  .box--lead .box__logo{ height:clamp(30px,8.5vw,56px); margin-bottom:16px; }
+  .box--lead h2{ font-size:clamp(1.28rem,5.4vw,1.8rem); }
+  .box--lead p{ font-size:1rem; }
+  .box p{ font-size:.97rem; }
+  .box h3{ font-size:12px; }
+  .box__in{ padding:20px; padding-top:26px; }
+  .box__link{ width:100%; justify-content:center; margin-top:20px; }
+  .site-foot__in{ padding-inline:var(--gut); }
+  .site-foot p{ font-size:12.5px; line-height:1.55; }
+}
+
+/* Nothing should ever force a sideways scroll on a phone */
+@media (max-width:560px){
+  html,body{ overflow-x:hidden; }
+  .box__link{ font-size:10px; letter-spacing:.1em; padding:13px 14px; }
 }
 
 /* ===========================================================================
@@ -753,7 +771,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         <section class="panel is-active" id="panel-0" data-co="aig" aria-labelledby="tab-0">
         <article class="box box--lead" style="--x:27%;--y:50%;--w:34%;--d:.05s">
           <div class="box__in">
-            <img class="box__logo box__logo--mark" src="assets/logos/AIG-Logo-Emblem-Negative.svg" alt="" aria-hidden="true">
+            <img class="box__logo" src="assets/logos/AIG-Logo-Partial-Negative.svg" alt="" aria-hidden="true">
             <p class="anno">The Group &middot; United Kingdom</p>
             <h2 id="h-aig">Alliance Infrastructure Group is a UK infrastructure and construction group.</h2>
             <p>Alliance Infrastructure Group is building a leading UK infrastructure platform, bringing together high-quality businesses and specialist capabilities to deliver the infrastructure of tomorrow. We combine entrepreneurial businesses, technical expertise and disciplined investment to create a diversified group capable of delivering complex infrastructure projects at scale.</p>
@@ -785,7 +803,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         <section class="panel" id="panel-1" data-co="lynx" aria-labelledby="tab-1">
         <article class="box box--lead" style="--x:27%;--y:50%;--w:34%;--d:.05s">
           <div class="box__in">
-            <img class="box__logo" src="assets/logos/Lynx-Logo-Full-Negative.svg" alt="Lynx">
+            <img class="box__logo" src="assets/logos/Lynx-Logo-Partial-Negative.svg" alt="Lynx">
             <h2>Lynx Construction Group is a UK construction and infrastructure principal contractor.</h2>
             <p>Lynx is essentially a specialist nationwide construction principal contractor that builds and refurbishes retail, commercial and residential sites, with a growing emphasis on large-scale power and fuel infrastructure.</p>
             <a class="box__link" href="https://lynxconstruction.co.uk/" target="_blank" rel="noopener noreferrer">
@@ -820,7 +838,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         <section class="panel" id="panel-2" data-co="sfi" aria-labelledby="tab-2">
         <article class="box box--lead" style="--x:27%;--y:50%;--w:34%;--d:.05s">
           <div class="box__in">
-            <img class="box__logo" src="assets/logos/SFI-Logo-Full-Negative.svg" alt="SFI">
+            <img class="box__logo" src="assets/logos/SFI-Logo-Partial-Negative.svg" alt="SFI">
             <h2>Delivering Mechanical and Electrical engineering solutions nationwide.</h2>
             <p>SFI Electrical delivers mechanical and electrical engineering services for clients across a broad range of sectors throughout the UK. From design and planning through to installation, commissioning and maintenance, the business provides a single-source solution for both standalone and multidisciplinary projects.</p>
             <a class="box__link" href="https://www.sfielectrical.co.uk/" target="_blank" rel="noopener noreferrer">
@@ -855,11 +873,9 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         <section class="panel" id="panel-3" data-co="gridcore" aria-labelledby="tab-3">
         <article class="box box--lead" style="--x:27%;--y:50%;--w:34%;--d:.05s">
           <div class="box__in">
-            <img class="box__logo" src="assets/logos/GCP-Logo-Full-Negative.svg" alt="Gridcore">
-            <!-- [PLACEHOLDER: gridcore-heading] -->
-            <h2 data-ph="gridcore-heading">One line on what Gridcore does.</h2>
-            <!-- [PLACEHOLDER: gridcore-lead] -->
-            <p data-ph="gridcore-lead">[PLACEHOLDER: copy not supplied yet — two or three sentences on what the business does, the work it takes on and who for.]</p>
+            <img class="box__logo" src="assets/logos/GCP-Logo-Partial-Negative.svg" alt="Gridcore">
+            <h2>Gridcore Power is a trusted NERS-accredited Independent Connection Provider (ICP).</h2>
+            <p>Specialising in the delivery of electrical connections to the distribution network, ranging from Low Voltage to 33kV Primary Substation projects. With deep industry expertise and a commitment to excellence, our experienced teams deliver reliable, high-quality solutions tailored to our clients&rsquo; needs.</p>
             <a class="box__link" href="https://www.gridcorepower.co.uk/" target="_blank" rel="noopener noreferrer">
               Visit Gridcore <i aria-hidden="true">&#8599;</i>
               <span class="vh">(opens in a new tab)</span>
@@ -870,19 +886,19 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         <article class="box box--note" style="--d:.16s">
           <div class="box__in">
             <span class="box__mark" aria-hidden="true"></span>
-            <p data-ph="gridcore-note-1">[PLACEHOLDER: Gridcore point one.]</p>
+            <p>Delivering specialist electrical connections from Low Voltage through to 33kV Primary Substations, nationwide.</p>
           </div>
         </article>
         <article class="box box--note" style="--d:.28s">
           <div class="box__in">
             <span class="box__mark" aria-hidden="true"></span>
-            <p data-ph="gridcore-note-2">[PLACEHOLDER: Gridcore point two.]</p>
+            <p>Combining deep technical expertise with proven delivery capability to connect critical infrastructure to the distribution network.</p>
           </div>
         </article>
         <article class="box box--note" style="--d:.40s">
           <div class="box__in">
             <span class="box__mark" aria-hidden="true"></span>
-            <p data-ph="gridcore-note-3">[PLACEHOLDER: Gridcore point three.]</p>
+            <p>Providing seamless end-to-end connection solutions, from network design and construction through to testing, commissioning and energisation.</p>
           </div>
         </article>
         </div>
@@ -1003,7 +1019,7 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
      stale timer bails out instead of writing the wrong name. */
   var titleEl = document.querySelector('.title');
   var TITLES = ['Alliance Infrastructure Group', 'Lynx Construction Group',
-                'SFI Electrical', 'Gridcore'];
+                'SFI Electrical', 'Gridcore Power'];
   var titleSeq = 0;
 
   function buildTitle(i) {
@@ -1156,6 +1172,21 @@ body[data-stop="3"] .seg i:nth-child(4){ background-color:var(--active-house); }
         });
       }, { rootMargin: '200px 0px' });
       panels.forEach(function (p) { io.observe(p); });
+
+      // The wheel is gone on this layout, so the accent, the header
+      // segments and the title follow whichever panel is in view instead.
+      var shown = 0;
+      var accentIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          var i = panels.indexOf(en.target);
+          if (i < 0 || i === shown) return;
+          shown = i;
+          document.body.setAttribute('data-stop', String(i));
+          setTitle(i, true);
+        });
+      }, { threshold: 0.45 });
+      panels.forEach(function (p) { accentIO.observe(p); });
     } else {
       panels.forEach(loadShot);
     }
