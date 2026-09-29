@@ -1,29 +1,32 @@
 BACKDROP IMAGES
 ===============
-These four files are wired up and working:
+The site loads the four compressed files:
 
-  AIG stock background.jpeg        stop 00 - Alliance Infrastructure Group
-  Lynx stock background.jpeg       stop 01 - Lynx
-  SFI stock background.jpeg        stop 02 - SFI
-  Gridcore stock background.jpeg   stop 03 - Gridcore
+  aig.jpg        stop 00 - Alliance Infrastructure Group
+  lynx.jpg       stop 01 - Lynx
+  sfi.jpg        stop 02 - SFI
+  gridcore.jpg   stop 03 - Gridcore
+
+These were generated from the originals, which are kept alongside them:
+
+  AIG stock background.jpeg        4192x2325   1.94 MB
+  Lynx stock background.jpeg       8897x4344   6.00 MB
+  Gridcore stock background.jpeg   8897x4344   6.16 MB
+  SFI stock background.jpeg        3645x1164   1.13 MB
+
+  total 15.2 MB  ->  0.5 MB  (97 percent smaller)
+
+The originals were the cause of the page feeling laggy. At 8897x4344 a
+single image needs about 155 MB of memory once decoded, and the page had
+two of them with CSS filters applied on top. Resized to 1800px wide at
+JPEG quality 72 they are visually identical here, because the design
+darkens them heavily anyway.
+
+TO REPLACE AN IMAGE
+-------------------
+Save the new file over the matching .jpg above, at roughly 1800px wide.
+Nothing in index.html needs changing. Do not point the site back at the
+full size originals.
 
 The paths live in the four --shot-* tokens at the top of the <style>
-block in index.html, and nowhere else. Spaces are encoded as %20 there.
-If you rename a file, update its token to match.
-
-PLEASE COMPRESS THESE
----------------------
-Current total: about 15 MB.
-  Gridcore  6.2 MB
-  Lynx      6.0 MB
-  AIG       1.9 MB
-  SFI       1.1 MB
-
-Gridcore and Lynx are roughly six times larger than they need to be.
-Target about 300-500 KB each: resize to 1800px wide and save as WebP
-(or JPEG at quality 75). Squoosh.app does this in a browser with no
-install. Keep the same filenames and nothing else needs changing.
-
-The page already loads each photograph only when its stop is reached,
-so the first view pulls just the AIG image - but a visitor who scrolls
-through all four still downloads the lot.
+block in index.html, and nowhere else.
